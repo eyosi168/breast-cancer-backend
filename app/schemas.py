@@ -2,6 +2,12 @@ from pydantic import BaseModel
 
 class PredictionInput(BaseModel):
     model_type: str  # "LR" or "DT"
-    mean_radius: float
-    mean_texture: float
-    mean_concave_points: float
+
+    radius_mean: float
+    texture_mean: float
+    perimeter_mean: float
+    area_mean: float
+    concavity_mean: float
+    concave_points_mean: float
+    radius_worst: float
+    concave_points_worst: float

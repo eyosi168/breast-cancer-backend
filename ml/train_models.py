@@ -8,26 +8,30 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, classification_report
 
-#  Load dataset
+# Load dataset
 df = pd.read_csv("dataset/breast_cancer.csv")
+
+# Clean column names
 df.columns = (
     df.columns
     .str.strip()
     .str.replace(" ", "_")
 )
 
-
-
-# 2️ Target variable
+# Target variable
 y = df["diagnosis"].map({"M": 1, "B": 0})
 
-#  ONLY 3 FEATURES (important)
+# IMPORTANT FEATURES (8)
 FEATURES = [
     "radius_mean",
     "texture_mean",
-    "concave_points_mean"
+    "perimeter_mean",
+    "area_mean",
+    "concavity_mean",
+    "concave_points_mean",
+    "radius_worst",
+    "concave_points_worst"
 ]
-
 
 X = df[FEATURES]
 
@@ -47,12 +51,11 @@ dt_pipeline = Pipeline([
     ("model", DecisionTreeClassifier(random_state=42))
 ])
 
-#  Train models
+# Train models
 lr_pipeline.fit(X_train, y_train)
 dt_pipeline.fit(X_train, y_train)
 
-#  EVALUATION (THIS IS WHAT YOU WERE CONFUSED ABOUT)
-
+# Evaluation
 print("\n Logistic Regression Evaluation")
 lr_preds = lr_pipeline.predict(X_test)
 print("Accuracy:", accuracy_score(y_test, lr_preds))
@@ -63,9 +66,8 @@ dt_preds = dt_pipeline.predict(X_test)
 print("Accuracy:", accuracy_score(y_test, dt_preds))
 print(classification_report(y_test, dt_preds))
 
-#  Save models
+# Save models
 joblib.dump(lr_pipeline, "ml/models/logistic_regression_pipeline.joblib")
 joblib.dump(dt_pipeline, "ml/models/decision_tree_pipeline.joblib")
-
 
 print("\n Models trained, evaluated, and saved successfully")

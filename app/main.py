@@ -7,10 +7,10 @@ import numpy as np
 
 app = FastAPI()
 
-# 🔓 CORS CONFIGURATION (required for frontend)
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # allow all during development
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,9 +25,14 @@ def predict(data: PredictionInput):
     model = get_model(data.model_type)
 
     features = np.array([[
-        data.mean_radius,
-        data.mean_texture,
-        data.mean_concave_points
+        data.radius_mean,
+        data.texture_mean,
+        data.perimeter_mean,
+        data.area_mean,
+        data.concavity_mean,
+        data.concave_points_mean,
+        data.radius_worst,
+        data.concave_points_worst
     ]])
 
     prediction = model.predict(features)[0]
